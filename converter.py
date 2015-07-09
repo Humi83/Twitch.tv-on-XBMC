@@ -80,12 +80,14 @@ class JsonListItemConverter(object):
         channel = stream[Keys.CHANNEL]
         videobanner = channel.get(Keys.VIDEO_BANNER, '')
         logo = channel.get(Keys.LOGO, '')
+        preview = stream[Keys.PREVIEW]
         return {'label': self.getTitleForStream(stream),
                 'path': self.plugin.url_for(endpoint='playLive',
                                             name=channel[Keys.NAME]),
                 'is_playable': True,
-                'icon': videobanner if videobanner else logo,
-                'thumbnail': videobanner if videobanner else logo
+                'icon': logo,
+                'thumbnail': preview.get('medium', ''),
+                'context_menu' : [('Activity Feed', 'Container.Update(' + self.plugin.url_for(endpoint='channelVideos', name=channel[Keys.NAME]) + ')')]
                 }
 
     def getTitleForStream(self, stream):
